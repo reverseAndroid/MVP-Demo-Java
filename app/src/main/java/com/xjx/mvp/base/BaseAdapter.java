@@ -9,9 +9,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.xjx.mvp.R;
+
 import java.util.List;
 
-public abstract class BaseAdapter<B> extends RecyclerView.Adapter {
+public abstract class BaseAdapter<B> extends RecyclerView.Adapter<BaseAdapter.BaseViewHolder> {
 
     private Context mContext;
     private List<B> mList;
@@ -37,11 +39,11 @@ public abstract class BaseAdapter<B> extends RecyclerView.Adapter {
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        RecyclerView.ViewHolder mViewHolder;
+    public BaseAdapter.BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        BaseAdapter.BaseViewHolder mViewHolder;
         LayoutInflater inflater = LayoutInflater.from(mContext);
         if (viewType == 0) {
-            mViewHolder = new EmptyHolder(inflater.inflate(getHolderLayout(), parent, false));
+            mViewHolder = new BaseViewHolder(inflater.inflate(R.layout.item_empty, parent, false));
         } else {
             mViewHolder = new BaseViewHolder(inflater.inflate(getHolderLayout(), parent, false));
         }
@@ -49,13 +51,12 @@ public abstract class BaseAdapter<B> extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull BaseAdapter.BaseViewHolder holder, int position) {
         if (mList.size() != 0) {
-            BaseAdapter.BaseViewHolder baseViewHolder = (BaseViewHolder) holder;
             B b = mList.get(position);
-            bindHolder(baseViewHolder, b);
+            bindHolder(holder, b);
 
-            baseViewHolder.itemView.setOnClickListener(v -> {
+            holder.itemView.setOnClickListener(v -> {
                 if (mOnItemClickListener != null) {
                     mOnItemClickListener.onItemClick(position);
                 }
@@ -108,12 +109,6 @@ public abstract class BaseAdapter<B> extends RecyclerView.Adapter {
                 views.put(id, view);
             }
             return view;
-        }
-    }
-
-    public class EmptyHolder extends RecyclerView.ViewHolder {
-        public EmptyHolder(View view) {
-            super(view);
         }
     }
 }
