@@ -16,17 +16,19 @@ public abstract class BaseAdapter<B> extends RecyclerView.Adapter {
     private Context mContext;
     private List<B> mList;
     public OnItemClickListener mOnItemClickListener;
+
     public abstract int getHolderLayout();
-    public abstract void bindHolder(RecyclerView.ViewHolder holder, B b);
+
+    public abstract void bindHolder(BaseAdapter.BaseViewHolder holder, B b);
 
     public BaseAdapter(Context context, List<B> list) {
         this.mContext = context;
         this.mList = list;
     }
 
-    public interface OnItemClickListener<B> {
+    public interface OnItemClickListener {
 
-        void onItemClick(B bean);
+        void onItemClick(int position);
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -49,8 +51,15 @@ public abstract class BaseAdapter<B> extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (mList.size() != 0) {
+            BaseAdapter.BaseViewHolder baseViewHolder = (BaseViewHolder) holder;
             B b = mList.get(position);
-            bindHolder(holder, b);
+            bindHolder(baseViewHolder, b);
+
+            baseViewHolder.itemView.setOnClickListener(v -> {
+                if (mOnItemClickListener != null) {
+                    mOnItemClickListener.onItemClick(position);
+                }
+            });
         }
     }
 
@@ -103,7 +112,6 @@ public abstract class BaseAdapter<B> extends RecyclerView.Adapter {
     }
 
     public class EmptyHolder extends RecyclerView.ViewHolder {
-
         public EmptyHolder(View view) {
             super(view);
         }
