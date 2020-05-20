@@ -23,6 +23,7 @@ public abstract class BaseFragment<M, A, V, P extends BasePresenter<M, A, V>> ex
         View view = inflater.inflate(initContentView(), container, false);
         ButterKnife.bind(this, view);
         mModel = initModel();
+        mActivity = (A) getCurrentActivity();
         mPresenter = initPresenter();
         mPresenter.attachView(mModel, mActivity, (V) this);
         return view;
