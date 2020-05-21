@@ -17,11 +17,13 @@ public abstract class BaseAdapter<B> extends RecyclerView.Adapter<BaseAdapter.Ba
 
     private Context mContext;
     private List<B> mList;
-    public OnItemClickListener mOnItemClickListener;
+    private OnItemClickListener mOnItemClickListener;
 
     public abstract int getHolderLayout();
 
     public abstract void bindHolder(BaseAdapter.BaseViewHolder holder, B b);
+
+    public abstract void setOnItemClickListener(OnItemClickListener onItemClickListener);
 
     public BaseAdapter(Context context, List<B> list) {
         this.mContext = context;
@@ -31,10 +33,6 @@ public abstract class BaseAdapter<B> extends RecyclerView.Adapter<BaseAdapter.Ba
     public interface OnItemClickListener {
 
         void onItemClick(int position);
-    }
-
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        this.mOnItemClickListener = onItemClickListener;
     }
 
     @NonNull
